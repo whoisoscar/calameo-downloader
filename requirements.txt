@@ -1,0 +1,8 @@
+requests
+bs4
+cairosvg
+PyPDF2
+fpdf
+Pillow
+pyopenssl
+progressbar

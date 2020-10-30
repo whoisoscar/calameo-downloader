@@ -9,13 +9,9 @@ from PIL import Image
 import urllib3.contrib.pyopenssl
 import progressbar
 
-def sleep_random():
-    sleep_time = random.randrange(0,20,2)/10
-    sleep(sleep_time)
-
-book_url_list = ["https://www.calameo.com/read/000777721b895e238f95d?authid=2ijHqny0iWtq&region=international"]
-
-only_pdf = True
+#Configurations
+book_url_list = []
+only_pdf = False
 
 with requests.Session() as s:
     for book_url in book_url_list:
@@ -32,7 +28,6 @@ with requests.Session() as s:
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
             }
             r = s.get(book_url, headers=headers)
-            #print(r.text)
 
             parsed_html = BeautifulSoup(r.text, "lxml")
             og_link = parsed_html.head.find('meta', attrs={'property':'og:image'})["content"].replace("1.svgz","").replace("1.jpg","")

@@ -26,7 +26,10 @@ These configurations include:
 
 Given a list of calmeo.com books, the script will go through all the pages and dowload them.
 If `only_pdf` is set to false, the script will download both a SVG and PVG version.
-    This is done for personal preference as SVG's allow to search and copy text, but are more heavy-weight.
+
+This is done for personal preference as SVG's allow to search and copy text, but are more heavy-weight.
+
+Onece all files are downloaded, the script combines all files into one PDF.
 
 Setting `only_pdf` to true will take significantly less time as SVG's take a long time to download.
 

@@ -6,7 +6,7 @@ During the early stages of lockdown, Oxford provided all of their educational bo
 --
 To install files:
 `````
-git clone https://github.com/whoisoscar/calmeo-download
+git clone https://github.com/whoisoscar/calameo-downloader
 `````
 To Install Required Modules:
 `````

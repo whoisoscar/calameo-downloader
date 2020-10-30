@@ -34,3 +34,7 @@ Onece all files are downloaded, the script combines all files into one PDF.
 Setting `only_pdf` to true will take significantly less time as SVG's take a long time to download.
 
 You can enter multiple urls within the list and the script will download all of them.
+
+**To-do**
+--
+- [ ] Clean up code and remove abundant / repetetive code.

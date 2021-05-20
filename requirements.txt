@@ -6,3 +6,5 @@ fpdf
 Pillow
 pyopenssl
 progressbar
+lxml
+progressbar2

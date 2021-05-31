@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import time
-from time import sleep
 import cairosvg
 import os, sys
 from PyPDF2 import PdfFileMerger
@@ -97,7 +96,7 @@ def pdf_maker(books,directory=os.getcwd(), only_pdf=True, verbose=True):
     logFormatter = logging.Formatter("%(asctime)s [%(threadName)s] [%(levelname)s]:  %(message)s", datefmt='%d/%m/%Y %H:%M:%S')
     rootLogger = logging.getLogger()
     rootLogger.setLevel("DEBUG")
-    fileHandler = logging.FileHandler(f'calameo_{time.strftime("%Y_%m_%d__%H_%M_%S")}.log')
+    fileHandler = logging.FileHandler(f'{directory}/calameo_{time.strftime("%Y_%m_%d__%H_%M_%S")}.log')
     fileHandler.setFormatter(logFormatter)
     fileHandler.setLevel("DEBUG")
     rootLogger.addHandler(fileHandler)

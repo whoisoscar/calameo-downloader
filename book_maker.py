@@ -7,7 +7,6 @@ from PyPDF2 import PdfFileMerger
 from fpdf import FPDF
 from PIL import Image
 import urllib3.contrib.pyopenssl
-from progressbar import progressbar
 import logging
 from collections import namedtuple
 import re

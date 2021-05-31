@@ -1,10 +1,9 @@
+beautifulsoup4
 requests
-bs4
 cairosvg
-PyPDF2
 fpdf
-Pillow
-pyopenssl
-progressbar
-lxml
-progressbar2
+pillow
+pypdf2
+urllib3
+collections
+logging

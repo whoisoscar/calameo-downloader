@@ -2,6 +2,7 @@ import argparse
 import requests
 from bs4 import BeautifulSoup
 from book_maker import *
+from itertools import zip_longest
 
 def url_checker(calameo_url:str):
     if "calameo.com" not in calameo_url:
@@ -24,8 +25,9 @@ ap = argparse.ArgumentParser()
 # Add the arguments to the parser
 ap.add_argument("-u", "--urls", nargs='+', type=url_checker, required=True,
    help="calameo url of the book you want to download")
-ap.add_argument("-n", "--names", nargs='*', required=False,
+ap.add_argument("-n", "--names", nargs='*', required=False, default=[],
    help="the output name of the PDF book, if not specified, it will be the one on the website")
 args = vars(ap.parse_args())
 
-pdf_maker(valid_urls(args["urls"]),only_pdf=True)
+books = {book:title for book,title in zip_longest(valid_urls(args["urls"]),args["names"],fillvalue="")}
+pdf_maker(books,only_pdf=True)

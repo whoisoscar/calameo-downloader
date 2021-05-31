@@ -16,9 +16,9 @@ logging.basicConfig(filename=f'calameo_{time.strftime("%Y_%m_%d__%H_%M_%S")}.log
                     datefmt='%d/%m/%Y %H:%M:%S',
                     level=logging.DEBUG)
 
-def pdf_maker(book_url_list=[], only_pdf=False):
+def pdf_maker(books, only_pdf=False):
     with requests.Session() as s:
-        for book_url in book_url_list:
+        for book_url,title in books.items():
             if not only_pdf:
                 image_list = []
                 pdf_list = []
@@ -126,7 +126,8 @@ def pdf_maker(book_url_list=[], only_pdf=False):
                 pdf.add_page()
                 pdf.image(page, 0, 0)
 
-            pdf.output("JPG - "+book_title+".pdf", "F")
+            output_title = title if title else book_title.replace("/","_")
+            pdf.output(output_title+".pdf", "F")
 
             for image in image_list:
                 os.remove(image)

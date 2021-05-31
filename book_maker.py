@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 from time import sleep
 import cairosvg
 import os
@@ -7,9 +8,15 @@ from PyPDF2 import PdfFileMerger
 from fpdf import FPDF
 from PIL import Image
 import urllib3.contrib.pyopenssl
-import progressbar
+from progressbar import progressbar
+import logging
 
-def pdf_maker(book_url=[], only_pdf=False):
+logging.basicConfig(filename=f'calameo_{time.strftime("%Y_%m_%d__%H_%M_%S")}.log',
+                    format='%(asctime)s %(levelname)s:%(message)s',
+                    datefmt='%d/%m/%Y %H:%M:%S',
+                    level=logging.DEBUG)
+
+def pdf_maker(book_url_list=[], only_pdf=False):
     with requests.Session() as s:
         for book_url in book_url_list:
             if not only_pdf:
@@ -24,7 +31,7 @@ def pdf_maker(book_url=[], only_pdf=False):
                     'Upgrade-Insecure-Requests': '1',
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
                 }
-                r = s.get(book_url, headers=headers)
+                r = s.get(book_url)
 
                 parsed_html = BeautifulSoup(r.text, "lxml")
                 og_link = parsed_html.head.find('meta', attrs={'property':'og:image'})["content"].replace("1.svgz","").replace("1.jpg","")
@@ -39,7 +46,7 @@ def pdf_maker(book_url=[], only_pdf=False):
                 book_length = book_description[pre_book_length+8:post_book_length]
                 #Download all SVG files
                 print("Downloading all "+book_length+" SVG files...")
-                for i in progressbar.progressbar(range(int(book_length))):
+                for i in progressbar.ProgressBar(range(int(book_length))):
                     while True:
                         try:
                             r = s.get(og_link+str(i+1)+".svgz",headers=headers)
@@ -80,7 +87,6 @@ def pdf_maker(book_url=[], only_pdf=False):
             print("")
             print("--> Downloading from JPG to PDF")
             r = s.get(book_url)
-            #print(r.text)
 
             parsed_html = BeautifulSoup(r.text, "lxml")
             og_link = parsed_html.head.find('meta', attrs={'property':'og:image'})["content"].replace("1.svgz","").replace("1.jpg","")
@@ -89,16 +95,18 @@ def pdf_maker(book_url=[], only_pdf=False):
             pre_book_title = (book_description.find("Title:"))
             post_book_title = (book_description.find(", Author"))
             book_title = book_description[pre_book_title+7:post_book_title]
-
+            logging.info(f"{book_title} is being downloaded")
             pre_book_length = (book_description.find("Length:"))
             post_book_length = (book_description.find(" pages,"))
             book_length = book_description[pre_book_length+8:post_book_length]
+            logging.info(f"Number of pages: {book_length}")
             #Download all JPG files
             print("Downloading all JPG files...")
-            for i in progressbar.progressbar(range(int(book_length))):
+            progress = progressbar.ProgressBar()
+            for i in progress(range(int(book_length))):
                 while True:
                     try:
-                        r = s.get(og_link+str(i+1)+".jpg",headers=headers)
+                        r = s.get(og_link+str(i+1)+".jpg")
                         break
                     except:
                         #print("Error")
@@ -114,13 +122,13 @@ def pdf_maker(book_url=[], only_pdf=False):
 
             pdf = FPDF(unit = "pt", format = [width, height])
 
-            with progressbar.ProgressBar(max_value=int(book_length)) as bar:
-                for idx, page in enumerate(image_list):
-                    pdf.add_page()
-                    pdf.image(page, 0, 0)
-                    bar.update(idx)
+            for idx, page in enumerate(image_list):
+                pdf.add_page()
+                pdf.image(page, 0, 0)
 
             pdf.output("JPG - "+book_title+".pdf", "F")
 
             for image in image_list:
                 os.remove(image)
+
+            print("All JPG files cleaned")

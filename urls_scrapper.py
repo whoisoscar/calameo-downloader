@@ -3,8 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 from book_maker import *
 
-def url_checker(calameo_url:string):
-    if "calameo.com" not in url:
+def url_checker(calameo_url:str):
+    if "calameo.com" not in calameo_url:
         raise argparse.ArgumentTypeError(f"No calameo book will be found there: {calameo_url}")
     else:
         return calameo_url
@@ -28,4 +28,4 @@ ap.add_argument("-n", "--names", nargs='*', required=False,
    help="the output name of the PDF book, if not specified, it will be the one on the website")
 args = vars(ap.parse_args())
 
-pdf_maker(valid_urls(args[urls]),only_pdf=True)
+pdf_maker(valid_urls(args["urls"]),only_pdf=True)

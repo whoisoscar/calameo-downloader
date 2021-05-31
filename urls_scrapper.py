@@ -30,4 +30,4 @@ ap.add_argument("-n", "--names", nargs='*', required=False, default=[],
 args = vars(ap.parse_args())
 
 books = {book:title for book,title in zip_longest(valid_urls(args["urls"]),args["names"],fillvalue="")}
-pdf_maker(books,only_pdf=True)
+pdf_maker(books)

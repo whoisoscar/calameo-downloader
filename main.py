@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from time import sleep
 import cairosvg
 import os
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 from fpdf import FPDF
 from PIL import Image
 import urllib3.contrib.pyopenssl
@@ -68,8 +68,8 @@ with requests.Session() as s:
           bar.update(idx)
 
       #Join all PDFs
-      print("Joining and exporting all PDFs...")
-      merger = PdfFileMerger()
+      print("Joining all PDFs...")
+      merger = PdfMerger()
       with progressbar.ProgressBar(max_value=int(book_length)) as bar:
         for idx, pdf in enumerate(pdf_list):
           merger.append(pdf)
@@ -80,6 +80,7 @@ with requests.Session() as s:
       # cleanup
       for image in image_list: os.remove(image)
       for pdf in pdf_list: os.remove(pdf)
+    # end if not only_pdf
 
 
     # JPG to pdf

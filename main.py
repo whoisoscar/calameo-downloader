@@ -9,9 +9,15 @@ from PIL import Image
 import urllib3.contrib.pyopenssl
 import progressbar
 
-#Configurations
-book_url_list = []
-only_pdf = False
+import argparse
+parser = argparse.ArgumentParser(prog='Calameo downloader',
+  description='Downloads files from Calameo.com as pdf files')
+parser.add_argument('url', nargs='+', help='calameo urls to download')
+parser.add_argument('--jpg_only', default=False, action='store_true',
+  help='only download the jpg images, faster and more faithful layout, but looses the vectorial information')
+args = parser.parse_args()
+book_url_list = args.url
+only_pdf = args.jpg_only
 
 with requests.Session() as s:
   for book_url in book_url_list:
